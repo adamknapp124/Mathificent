@@ -1,9 +1,12 @@
 <template>
-    <div>Time Left: 60</div>
+    <strong>Time Left: {{timeLeft}}</strong>
 </template>
 
 <script>
     export default {
-        name: 'Timer'
+        name: 'Timer',
+        props: {
+            timeLeft: Number
+        }
     }
 </script>
