@@ -66,7 +66,9 @@
         input: '',
         operands: {num1: '1', num2: '1'},
         answered: false,
-        score: 0
+        score: 0,
+        gameLength: 60,
+        timeLeft: 0
       }
     },
     methods: {
@@ -76,6 +78,7 @@
       play() {
         this.screen = "play";
         this.newQuestion();
+        this.startTimer();
       },
       setInput(value) {
         this.input += String(value);
@@ -135,6 +138,22 @@
         this.operands = this.getRandNumbers(
           this.operation, 0, this.maxNumber
         );
+      },
+      startTimer() {
+        this.timeLeft = this.gameLength;
+        if (this.timeLeft > 0) {
+          this.timer = setInterval(() => {
+            this.timeLeft--;
+            if (this.timeLeft === 0) {
+              clearInterval(this.Timer);
+            }
+          }, 1000)
+        }
+      },
+      restart() {
+        this.score = 0;
+        this.startTimer();
+        this.newQuestion();
       }
     },
     computed: {
