@@ -30,7 +30,7 @@
           ['Division', '/']
         ],
         operation: 'x',
-        maxNumber: '15'
+        maxNumber: '17'
       }
     },
     computed: {  /*Creating an array of numbers that we use to populate the maximum number select input.*/
