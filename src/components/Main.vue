@@ -2,35 +2,59 @@
   <main id="main-container">
     <div v-if="screen === 'config'" id="config-container">
       <h1>Mathificent</h1>
-      <SelectInput :currentValue="operation" label="Operation"
+      <SelectInput :currentValue="operation" label="Operation" 
         id="operation" v-model="operation" :options="operations" />
       <SelectInput :currentValue="maxNumber" label="Maximum Number"
         id="max-number" v-model="maxNumber" :options="numbers" />
       <PlayButton @play-button-click="play" />
     </div>
     <div v-else-if="screen === 'play'" id="game-container" class="text-center">
-      <div class="row border-bottom" id="scoreboard">
-        <div class="col px-3 text-left">
-          <Score :score="score" />
-        </div>
-        <div class="col px-3 text-right">
-          <Timer />
-        </div>
-      </div>
-      <div :class="equationClass" id="equation">
-        <Equation :question="question"
-          :answer="input"
-          :answered="answered" />
-      </div>
-      <div class="row" id="buttons">
-        <div class="col">
-          <button class="btn btn-primary number-button"
-            v-for="button in buttons" :key="button"
-            @click="setInput(button)">{{button}}</button>
-          <button class="btn btn-primary" id="clear-button"
-            @click="clear">Clear</button>
-        </div>
-      </div>
+      <transition name="slide">
+        <template v-if="timeLeft === 0">
+          <div>
+            <h2>Time's Up!</h2>
+            <strong class="big">You Answered</strong>
+            <div class="huge">{{score}}</div>
+            <strong class="big">Questions Correctly</strong>
+            <button class="btn btn-primary form-control m-1"
+              v-on:click="restart()">
+                Play Again with Same Settings
+            </button>
+            <button class="btn btn-secondary form-control m-1"
+              v-on:click="config()">
+                Change Settings
+            </button>
+          </div>
+        </template>
+      </transition>
+      <transition name="slide-right">
+        <template v-if="timeLeft > 0">
+          <div>
+            <div class="row border-bottom" id="scoreboard">
+              <div class="col px-3 text-left">
+                <Score :score="score" />
+              </div>
+              <div class="col px-3 text-right">
+                <Timer :timeLeft="timeLeft" />
+              </div>
+            </div>
+            <div :class="equationClass" id="equation">
+              <Equation :question="question"
+                :answer="input"
+                :answered="answered" />
+            </div>
+            <div class="row" id="buttons">
+              <div class="col">
+                <button class="btn btn-primary number-button"
+                  v-for="button in buttons" :key="button"
+                  @click="setInput(button)">{{button}}</button>
+                <button class="btn btn-primary" id="clear-button"
+                  @click="clear">Clear</button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </transition>
     </div>
   </main>
 </template>
@@ -206,5 +230,13 @@
 
   #scoreboard {
     font-size: 1.5em;
+  }
+
+  .big {
+    font-size: 1.5em;
+  }
+
+  .huge {
+    font-size: 5em;
   }
 </style>
