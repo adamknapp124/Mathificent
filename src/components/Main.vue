@@ -164,12 +164,14 @@
         );
       },
       startTimer() {
+        window.addEventListener('keyup', this.handleKeyUp);
         this.timeLeft = this.gameLength;
         if (this.timeLeft > 0) {
           this.timer = setInterval(() => {
             this.timeLeft--;
             if (this.timeLeft === 0) {
-              clearInterval(this.Timer);
+              clearInterval(this.timer);
+              window.removeEventListener('keyup', this.handleKeyUp);
             }
           }, 1000)
         }
@@ -178,6 +180,16 @@
         this.score = 0;
         this.startTimer();
         this.newQuestion();
+      },
+      handleKeyUp(e) {
+        e.preventDefault();
+        if (e.keyCode === 32 || e.keyCode === 13) {
+          this.clear();
+        } else if (e.keyCode === 8) {
+          this.input = this.input.substring(0, this.input.length - 1);
+        } else if (!isNaN(e.key)) {
+          this.setInput(e.key);
+        }
       }
     },
     computed: {
@@ -202,7 +214,8 @@
         }
       }
     }
-  }</script>
+  }
+  </script>
 
 <style scoped>
   #main-container {
@@ -238,5 +251,36 @@
 
   .huge {
     font-size: 5em;
+  }
+
+  .slide-leave-active,
+  .slide-enter-active {
+    position: absolute;
+    top: 56px;
+    transition: 1s;
+    width: 380px;
+  }
+  .slide-enter {
+    transform: translate(-100%, 0);
+    transition: opacity .5s;
+  }
+  .slide-leave-to {
+    transform: translate(100%, 0);
+    opacity:0;
+  }
+  .slide-right-leave-active,
+  .slide-right-enter-active {
+    position: absolute;
+    top: 56px;
+    transition: 1s;
+    width: 380px;
+  }
+  .slide-right-enter {
+    transform: translate(100%, 0);
+    transition: opacity .5s;
+  }
+  .slide-right-leave-to {
+    transform: translate(-100%, 0);
+    opacity:0;
   }
 </style>
